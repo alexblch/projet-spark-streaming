@@ -14,7 +14,6 @@ object App {
     println("Spark session started")
 
     import spark.implicits._
-
     // Reduce log level to avoid verbosity
     spark.sparkContext.setLogLevel("WARN")
 
@@ -144,5 +143,4 @@ object App {
 /* command to run the application
 sbt package
 spark-submit --class ESGI.App target/scala-2.12/sparkstreamingapp_2.12-0.1.0-SNAPSHOT.jar
-
- */
+*/
