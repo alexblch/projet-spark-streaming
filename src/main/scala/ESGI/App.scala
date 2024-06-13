@@ -49,6 +49,22 @@ object App {
       averagePricesByBrand
     }
 
+
+    def calculateStandardDeviationByBrand(data: DataFrame): DataFrame = {
+      // Calcul de l'écart-type des prix par marque
+      var stddevByBrand = data.groupBy("brand")
+        .agg(
+          stddev($"price_double").alias("Ecart-type")
+        )
+
+      // Remplacer les valeurs null par 0
+      stddevByBrand = stddevByBrand
+        .withColumn("Ecart-type", coalesce($"Ecart-type", lit(0)))
+        .withColumn("Ecart-type", format_number($"Ecart-type", 2))
+
+      stddevByBrand
+    }
+
     // Define the schema for the CSV file
     val schema = new StructType()
       .add("id", IntegerType)
@@ -109,6 +125,14 @@ object App {
             averagePricesByBrand.show()
           }
 
+          val stddevByBrand = calculateStandardDeviationByBrand(transformedData)
+          println("Dataframe with standard deviation by brand:")
+          if (!stddevByBrand.isEmpty) {
+            println("Dataframe with standard deviation by brand:")
+            stddevByBrand.show()
+          }
+
+
           Thread.sleep(5000) // Wait 5 seconds before selecting the next random batch
         }
       }
@@ -117,3 +141,8 @@ object App {
     query.awaitTermination()
   }
 }
+/* command to run the application
+sbt package
+spark-submit --class ESGI.App target/scala-2.12/sparkstreamingapp_2.12-0.1.0-SNAPSHOT.jar
+
+ */
