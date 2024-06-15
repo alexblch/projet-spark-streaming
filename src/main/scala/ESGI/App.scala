@@ -3,6 +3,7 @@ package ESGI
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
+import ESGI.Function.Utils._
 
 object App {
   def main(args: Array[String]): Unit = {
@@ -16,53 +17,6 @@ object App {
     import spark.implicits._
     // Reduce log level to avoid verbosity
     spark.sparkContext.setLogLevel("WARN")
-
-    def replaceNullValues(df: DataFrame): DataFrame = {
-      df.na.fill("N/A")
-    }
-
-    def addColumnPriceDouble(df: DataFrame): DataFrame = {
-      df.withColumn("price_double", when(col("price").isNotNull && col("price") =!= "Price on request",
-        regexp_replace(col("price"), "[$,]", "").cast("double"))
-        .otherwise(0.0))
-    }
-
-    def calculateAveragePricesByBrand(data: DataFrame): DataFrame = {
-      // Filter out rows where price_double is 0
-      val watchDataWithDoublePrice = data.filter($"price_double" =!= 0)
-
-      // Check if the dataset is empty
-      if (watchDataWithDoublePrice.isEmpty) {
-        println("No data to process for average prices.")
-        return spark.emptyDataFrame
-      }
-
-      // Calculate the average price of all the dataset
-      val averagePrice: Double = watchDataWithDoublePrice.select(avg($"price_double")).first().getDouble(0)
-      // Calculate average prices by brand
-      var averagePricesByBrand = watchDataWithDoublePrice.groupBy("brand").agg(avg($"price_double").alias("Prix moyen"))
-      averagePricesByBrand = averagePricesByBrand.withColumn("Prix moyen", format_number($"Prix moyen", 2))
-
-      println("Prix moyen de toutes les montres : " + averagePrice + " $")
-
-      averagePricesByBrand
-    }
-
-
-    def calculateStandardDeviationByBrand(data: DataFrame): DataFrame = {
-      // Calcul de l'écart-type des prix par marque
-      var stddevByBrand = data.groupBy("brand")
-        .agg(
-          stddev($"price_double").alias("Ecart-type")
-        )
-
-      // Remplacer les valeurs null par 0
-      stddevByBrand = stddevByBrand
-        .withColumn("Ecart-type", coalesce($"Ecart-type", lit(0)))
-        .withColumn("Ecart-type", format_number($"Ecart-type", 2))
-
-      stddevByBrand
-    }
 
     // Define the schema for the CSV file
     val schema = new StructType()
@@ -119,18 +73,21 @@ object App {
           transformedData.show()
 
           println("Dataframe with average prices by brand:")
-          val averagePricesByBrand = calculateAveragePricesByBrand(transformedData)
+          val averagePricesByBrand = calculateAveragePricesByBrand(transformedData, spark)
           if (!averagePricesByBrand.isEmpty) {
             averagePricesByBrand.show()
           }
 
-          val stddevByBrand = calculateStandardDeviationByBrand(transformedData)
+          val stddevByBrand = calculateStandardDeviationByBrand(transformedData)(spark)
           println("Dataframe with standard deviation by brand:")
           if (!stddevByBrand.isEmpty) {
-            println("Dataframe with standard deviation by brand:")
             stddevByBrand.show()
           }
 
+          val medianBrand = calculateMedianPricesByBrand(transformedData, spark)
+          if(!medianBrand.isEmpty) {
+            medianBrand.show()
+          }
 
           Thread.sleep(5000) // Wait 5 seconds before selecting the next random batch
         }
@@ -140,7 +97,3 @@ object App {
     query.awaitTermination()
   }
 }
-/* command to run the application
-sbt package
-spark-submit --class ESGI.App target/scala-2.12/sparkstreamingapp_2.12-0.1.0-SNAPSHOT.jar
-*/

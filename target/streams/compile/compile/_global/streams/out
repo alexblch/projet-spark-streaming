@@ -1,4 +1,4 @@
-[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/ESGI/App.scala:75:17: not found: value processedData[0m
-[0m[[0m[31merror[0m] [0m[0m    val query = processedData.writeStream[0m
-[0m[[0m[31merror[0m] [0m[0m                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/User/OneDrive - Reseau-GES/ESGI/4eme année/Semestre 2/Spark streaming/projet-spark-streaming/src/main/scala/ESGI/Function/Utils.scala:45:16: value $ is not a member of StringContext[0m
+[0m[[0m[31merror[0m] [0m[0m        stddev($"price_double").alias("Ecart-type")[0m
+[0m[[0m[31merror[0m] [0m[0m               ^[0m
 [0m[[0m[31merror[0m] [0m[0mone error found[0m
