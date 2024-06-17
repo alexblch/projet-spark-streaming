@@ -89,6 +89,11 @@ object App {
             medianBrand.show()
           }
 
+          val max_min = displayMaxMinPricesByBrand(transformedData, spark)
+          if(!max_min.isEmpty) {
+            max_min.show()
+          }
+
           Thread.sleep(5000) // Wait 5 seconds before selecting the next random batch
         }
       }

@@ -76,4 +76,24 @@ object Utils {
 
     stddevByBrand
   }
+
+  def calculateMaxPricesByBrand(data: DataFrame): DataFrame = {
+    data.groupBy("brand").max("price_double").withColumnRenamed("max(price_double)", "Max of the price")
+  }
+
+  // Fonction pour calculer le max de price pour chaque marque
+  def calculateMinPricesByBrandNonZero(data: DataFrame): DataFrame = {
+    data.filter(col("price_double") =!= 0)
+      .groupBy("brand")
+      .min("price_double")
+      .withColumnRenamed("min(price_double)", "Min of the price")
+  }
+
+  // Display la fonction max et min
+  def displayMaxMinPricesByBrand(data: DataFrame, spark: SparkSession): DataFrame = {
+    val maxPrices = calculateMaxPricesByBrand(data)
+    val minPrices = calculateMinPricesByBrandNonZero(data)
+    maxPrices.join(minPrices, "brand")
+  }
+
 }
