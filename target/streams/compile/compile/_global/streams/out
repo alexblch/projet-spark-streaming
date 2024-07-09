@@ -1,4 +1,7 @@
-[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/ESGI/Function/Utils.scala:95:21: not found: value calculateMinPricesByBrand[0m
-[0m[[0m[31merror[0m] [0m[0m    val minPrices = calculateMinPricesByBrand(data)[0m
-[0m[[0m[31merror[0m] [0m[0m                    ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/App.scala:55:37: value toSeq is not a member of Object[0m
+[0m[[0m[31merror[0m] [0m[0m      val partitionData = partition.toSeq.toDF()[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/App.scala:56:28: not found: value TaskContext[0m
+[0m[[0m[31merror[0m] [0m[0m      val partitionIndex = TaskContext.get.partitionId()[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
