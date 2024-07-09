@@ -96,4 +96,12 @@ object Utils {
     maxPrices.join(minPrices, "brand")
   }
 
+  // Function to save DataFrame to CSV if it's not empty
+  def saveDataFrameToCSV(df: DataFrame, path: String): Unit = {
+    if (!df.isEmpty) {
+      df.write.mode("overwrite").option("header", "true").csv(path)
+    }
+  }
+
+
 }
