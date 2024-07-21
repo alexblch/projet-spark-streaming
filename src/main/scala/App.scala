@@ -10,6 +10,8 @@ object App {
     val spark = SparkSession.builder
       .appName("ESGIApp")
       .master("local[*]")
+      .config("spark.executor.memory", "4g")
+      .config("spark.driver.memory", "4g")
       .getOrCreate()
 
     spark.sparkContext.setLogLevel("WARN")
@@ -50,6 +52,7 @@ object App {
       .option("multiLine", "true")
       .schema(schema)
       .csv(csvFilePath)
+      .drop("_c0") // Supposons que la première colonne est vide et doit être ignorée
 
     println("CSV principal chargé")
 
@@ -58,11 +61,14 @@ object App {
     val totalLines = data.count().toInt
     val numFiles = (totalLines.toDouble / numLinesPerFile).ceil.toInt
 
+    // Randomly shuffle the data and repartition
+    val shuffledData = data.orderBy(rand()).repartition(numFiles)
+
     for (i <- 0 until numFiles) {
-      val randomLines = data.orderBy(rand()).limit(numLinesPerFile)
       val tempPath = s"$tmpDirPath/temp_$i"
 
-      randomLines.write
+      shuffledData.limit(numLinesPerFile)
+        .write
         .option("header", "true")
         .mode("overwrite")
         .csv(tempPath)

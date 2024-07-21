@@ -2,6 +2,7 @@ package ESGI.Function
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.expressions.Window
 
 object Utils {
 
@@ -49,7 +50,7 @@ object Utils {
       println("No data to process for median prices.")
       return spark.emptyDataFrame
     }
-    val medianPrice: Double = watchDataWithDoublePrice.select(median($"price_double")).first().getDouble(0)
+    val medianPrice: Double = watchDataWithDoublePrice.select(expr("percentile_approx(price_double, 0.5)")).first().getDouble(0)
     println("Mediane de toutes les montres : " + medianPrice + " $")    // Calculate median prices by brand
     println("Dataframe mediane/marques :")
     val medianPricesByBrand = watchDataWithDoublePrice
@@ -102,6 +103,4 @@ object Utils {
       df.write.mode("overwrite").option("header", "true").csv(path)
     }
   }
-
-
 }
