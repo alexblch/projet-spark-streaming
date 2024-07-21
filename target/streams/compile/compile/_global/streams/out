@@ -1,7 +1,19 @@
-[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/App.scala:55:37: value toSeq is not a member of Object[0m
-[0m[[0m[31merror[0m] [0m[0m      val partitionData = partition.toSeq.toDF()[0m
-[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
-[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/App.scala:56:28: not found: value TaskContext[0m
-[0m[[0m[31merror[0m] [0m[0m      val partitionIndex = TaskContext.get.partitionId()[0m
-[0m[[0m[31merror[0m] [0m[0m                           ^[0m
-[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:70:12: not found: value avg[0m
+[0m[[0m[31merror[0m] [0m[0m      .agg(avg($"price_double").alias("Prix moyen"))[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:71:33: not found: value format_number[0m
+[0m[[0m[31merror[0m] [0m[0m      .withColumn("Prix moyen", format_number($"Prix moyen", 2))[0m
+[0m[[0m[31merror[0m] [0m[0m                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:81:12: not found: value expr[0m
+[0m[[0m[31merror[0m] [0m[0m      .agg(expr("percentile_approx(price_double, 0.5)").alias("Prix médian"))[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:82:34: not found: value format_number[0m
+[0m[[0m[31merror[0m] [0m[0m      .withColumn("Prix médian", format_number($"Prix médian", 2))[0m
+[0m[[0m[31merror[0m] [0m[0m                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:92:12: not found: value stddev[0m
+[0m[[0m[31merror[0m] [0m[0m      .agg(stddev($"price_double").alias("Ecart-type"))[0m
+[0m[[0m[31merror[0m] [0m[0m           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/mnt/c/Users/bloch/IdeaProjects/spark/src/main/scala/AppStreaming.scala:93:33: not found: value format_number[0m
+[0m[[0m[31merror[0m] [0m[0m      .withColumn("Ecart-type", format_number($"Ecart-type", 2))[0m
+[0m[[0m[31merror[0m] [0m[0m                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m6 errors found[0m

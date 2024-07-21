@@ -32,6 +32,14 @@ object App {
 
     val csvFilePath = "src/main/files/Watches.csv"
     val tmpDirPath = "src/main/files/tmp/"
+    val streamingDirPath = "src/main/files/streaming/"
+
+    // Nettoyer le répertoire de streaming
+    Files.createDirectories(Paths.get(streamingDirPath)) // Crée le répertoire s'il n'existe pas
+    Files.walk(Paths.get(streamingDirPath))
+      .filter(Files.isRegularFile(_))
+      .forEach(Files.deleteIfExists)
+    println(s"Le répertoire $streamingDirPath a été nettoyé")
 
     // Lire le fichier CSV principal
     val data: DataFrame = spark.read
@@ -45,7 +53,7 @@ object App {
 
     println("CSV principal chargé")
 
-    // Diviser le fichier en plusieurs petits fichiers de 10 lignes aléatoires
+    // Diviser le fichier en plusieurs petits fichiers de 5000 lignes aléatoires
     val numLinesPerFile = 5000
     val totalLines = data.count().toInt
     val numFiles = (totalLines.toDouble / numLinesPerFile).ceil.toInt

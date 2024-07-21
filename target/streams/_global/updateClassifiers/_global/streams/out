@@ -1,4 +1,0 @@
-[warn] scala-library-2.12.13-sources.jar no longer exists at C:\Users\bloch\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.12.13\scala-library-2.12.13-sources.jar
-[debug] not up to date. inChanged = false, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Users/User/OneDrive%20-%20Reseau-GES/ESGI/4eme%20année/Semestre%202/Spark%20streaming/projet-spark-streaming/"), "root")...
-[debug] Done updating ProjectRef(uri("file:/C:/Users/User/OneDrive%20-%20Reseau-GES/ESGI/4eme%20année/Semestre%202/Spark%20streaming/projet-spark-streaming/"), "root")
