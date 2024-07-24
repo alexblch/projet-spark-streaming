@@ -99,6 +99,28 @@ object AppStreaming {
       .outputMode("complete")
       .start()
 
+    val maxPricesByBrand = dataWithPriceDouble
+      .groupBy("brand")
+      .agg(max($"price_double").alias("Prix max"))
+      .withColumn("Prix max", format_number($"Prix max", 2))
+
+    maxPricesByBrand.writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+
+    // Calculer et afficher les prix minimums par marque
+    val minPricesByBrand = dataWithPriceDouble
+      .filter($"price_double" =!= 0) // Ignorer les prix de 0
+      .groupBy("brand")
+      .agg(min($"price_double").alias("Prix min"))
+      .withColumn("Prix min", format_number($"Prix min", 2))
+
+    minPricesByBrand.writeStream
+      .format("console")
+      .outputMode("complete")
+      .start()
+
     // Démarrer un thread pour copier les fichiers aléatoirement toutes les 15 secondes
     new Thread(new Runnable {
       def run(): Unit = {
